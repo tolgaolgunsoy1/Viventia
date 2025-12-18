@@ -9,7 +9,7 @@ class LoginWindow(ctk.CTk):
         self.main_app = None
         
         self.title("Viventia - Giriş")
-        self.geometry("450x700")
+        self.geometry("450x400")
         self.configure(fg_color="#0F0F0F")
         self.resizable(False, False)
         
@@ -21,8 +21,8 @@ class LoginWindow(ctk.CTk):
     def center_window(self):
         self.update_idletasks()
         x = (self.winfo_screenwidth() // 2) - (450 // 2)
-        y = (self.winfo_screenheight() // 2) - (700 // 2)
-        self.geometry(f"450x700+{x}+{y}")
+        y = (self.winfo_screenheight() // 2) - (400 // 2)
+        self.geometry(f"450x400+{x}+{y}")
         
     def create_login_form(self):
         # Logo ve başlık
@@ -119,69 +119,9 @@ class LoginWindow(ctk.CTk):
         self.username_entry.bind('<Return>', lambda e: self.password_entry.focus())
         self.password_entry.bind('<Return>', lambda e: self.login())
         
-        # Demo hesapları
-        demo_frame = ctk.CTkFrame(self, fg_color="#1E1E1E", corner_radius=10)
-        demo_frame.pack(pady=(0, 20), padx=40, fill="x")
+
         
-        ctk.CTkLabel(
-            demo_frame,
-            text="🎯 Demo Hesaplar",
-            font=ctk.CTkFont(size=14, weight="bold"),
-            text_color="#50C878"
-        ).pack(pady=(15, 10))
-        
-        demo_accounts = [
-            ("👑 Admin", "admin", "admin123", "Tüm yetkilere sahip"),
-            ("💼 İK Yöneticisi", "hr_manager", "hr123", "Personel ve izin yönetimi"),
-            ("👥 Kullanıcı", "user", "user123", "Sadece görüntüleme")
-        ]
-        
-        for icon_role, username, password, desc in demo_accounts:
-            account_frame = ctk.CTkFrame(demo_frame, fg_color="#2A2A2A", corner_radius=8)
-            account_frame.pack(fill="x", padx=15, pady=5)
-            
-            left_frame = ctk.CTkFrame(account_frame, fg_color="transparent")
-            left_frame.pack(side="left", fill="both", expand=True, padx=15, pady=10)
-            
-            ctk.CTkLabel(
-                left_frame,
-                text=icon_role,
-                font=ctk.CTkFont(size=13, weight="bold")
-            ).pack(anchor="w")
-            
-            ctk.CTkLabel(
-                left_frame,
-                text=f"{username} / {password}",
-                font=ctk.CTkFont(size=11),
-                text_color="#50C878"
-            ).pack(anchor="w")
-            
-            ctk.CTkLabel(
-                left_frame,
-                text=desc,
-                font=ctk.CTkFont(size=10),
-                text_color="#808080"
-            ).pack(anchor="w")
-            
-            ctk.CTkButton(
-                account_frame,
-                text="Giriş",
-                width=70,
-                height=30,
-                fg_color="#50C878",
-                hover_color="#45B56B",
-                corner_radius=8,
-                command=lambda u=username, p=password: self.quick_login(u, p)
-            ).pack(side="right", padx=15, pady=10)
-        
-        ctk.CTkFrame(demo_frame, fg_color="transparent", height=10).pack()
-        
-    def quick_login(self, username, password):
-        self.username_entry.delete(0, 'end')
-        self.username_entry.insert(0, username)
-        self.password_entry.delete(0, 'end')
-        self.password_entry.insert(0, password)
-        self.login()
+
     
     def login(self):
         username = self.username_entry.get().strip()
@@ -208,7 +148,7 @@ class LoginWindow(ctk.CTk):
         
         # Pencereyi merkeze al
         x = self.winfo_x() + 75
-        y = self.winfo_y() + 200
+        y = self.winfo_y() + 125
         error_window.geometry(f"300x150+{x}+{y}")
         
         ctk.CTkLabel(
