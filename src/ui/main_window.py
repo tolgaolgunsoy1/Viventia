@@ -1,5 +1,4 @@
 import customtkinter as ctk
-from .enhanced_sidebar import EnhancedSidebar
 from .dashboard import Dashboard
 from .personnel_page import PersonnelPage
 from .recruitment_page import RecruitmentPage
@@ -37,7 +36,8 @@ class MainWindow(ctk.CTk):
         self.grid_rowconfigure(1, weight=1)
         
         # Bileşenler
-        self.sidebar = EnhancedSidebar(self, self.auth_manager)
+        from .sidebar import Sidebar
+        self.sidebar = Sidebar(self, self.auth_manager)
         self.sidebar.grid(row=0, column=0, rowspan=2, sticky="nsew")
         
         # Tema ayarları
@@ -114,14 +114,18 @@ class MainWindow(ctk.CTk):
         top_bar.grid(row=0, column=1, sticky="ew", padx=20, pady=(20, 0))
         top_bar.grid_propagate(False)
         
-        # Sol taraf - sistem durumu widget'ı
+        # Sol taraf - sistem durumu
         left_frame = ctk.CTkFrame(top_bar, fg_color="transparent")
         left_frame.pack(side="left", fill="both", expand=True, padx=20, pady=5)
         
-        # Sistem durumu widget'ını ekle
-        from .system_status_widget import SystemStatusWidget
-        self.system_status = SystemStatusWidget(left_frame)
-        self.system_status.pack(fill="both", expand=True)
+        # Basit sistem durumu
+        status_label = ctk.CTkLabel(
+            left_frame,
+            text="🟢 Sistem Aktif",
+            font=ctk.CTkFont(size=12, weight="bold"),
+            text_color="#50C878"
+        )
+        status_label.pack(expand=True)
         
         # Sağ taraf - hızlı erişim
         right_frame = ctk.CTkFrame(top_bar, fg_color="transparent")
@@ -186,9 +190,8 @@ class MainWindow(ctk.CTk):
             "Uygulamayı kapatmak istediğinizden emin misiniz?",
             "Çıkış Onayı"
         ):
-            # Sistem durumu widget'ını durdur
-            if hasattr(self, 'system_status'):
-                self.system_status.stop_updates()
+            # Temizlik işlemleri
+            pass
             self.logout()
     
     def _darken_color(self, color):

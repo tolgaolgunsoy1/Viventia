@@ -171,27 +171,13 @@ class LoginWindow(ctk.CTk):
             self.show_error("⚠️ Kullanıcı adı ve şifre gerekli!")
             return
             
-        # Yükleme ekranı göster
-        from .loading_screen import LoadingScreen
-        loading = LoadingScreen(self, "Giriş Yapılıyor...", "Kullanıcı bilgileri doğrulanıyor...")
-        
-        def check_login():
-            import time
-            time.sleep(2)  # Gerçekçi yükleme süresi
-            
-            if self.auth_manager.login(username, password):
-                loading.destroy()
-                self.destroy()
-                self.open_main_app()
-            else:
-                loading.destroy()
-                self.show_error("❌ Geçersiz kullanıcı adı veya şifre!")
-                self.password_entry.delete(0, 'end')
-        
-        import threading
-        thread = threading.Thread(target=check_login)
-        thread.daemon = True
-        thread.start()
+        # Direkt giriş kontrolü
+        if self.auth_manager.login(username, password):
+            self.destroy()
+            self.open_main_app()
+        else:
+            self.show_error("❌ Geçersiz kullanıcı adı veya şifre!")
+            self.password_entry.delete(0, 'end')
             
     def show_error(self, message):
         error_window = ctk.CTkToplevel(self)
