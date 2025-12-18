@@ -38,13 +38,20 @@ class AuthManager:
             )
         ''')
         
-        cursor.execute("SELECT COUNT(*) FROM users WHERE role = 'admin'")
+        cursor.execute("SELECT COUNT(*) FROM users")
         if cursor.fetchone()[0] == 0:
-            admin_hash = self.hash_password("admin123")
-            cursor.execute(
-                "INSERT INTO users (username, password_hash, role) VALUES (?, ?, ?)",
-                ("admin", admin_hash, "admin")
-            )
+            demo_users = [
+                ("admin", "admin123", "admin"),
+                ("hr_manager", "hr123", "hr_manager"),
+                ("user", "user123", "user")
+            ]
+            
+            for username, password, role in demo_users:
+                password_hash = self.hash_password(password)
+                cursor.execute(
+                    "INSERT INTO users (username, password_hash, role) VALUES (?, ?, ?)",
+                    (username, password_hash, role)
+                )
         
         conn.commit()
         conn.close()

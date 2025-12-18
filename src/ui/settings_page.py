@@ -88,6 +88,18 @@ class SettingsPage(ctk.CTkFrame):
             command=self.restore_backup
         ).pack(side="left", padx=10)
         
+        # Sadece admin için kullanıcı yönetimi
+        if hasattr(self, 'parent') and hasattr(self.parent, 'auth_manager') and self.parent.auth_manager:
+            if self.parent.auth_manager.current_user and self.parent.auth_manager.current_user['role'] == 'admin':
+                ctk.CTkButton(
+                    btn_frame,
+                    text="👥 Kullanıcılar",
+                    fg_color="#2196F3",
+                    hover_color="#1976D2",
+                    height=40,
+                    command=self.open_user_management
+                ).pack(side="left", padx=10)
+        
     def create_section(self, parent, title, settings):
         # Bölüm çerçevesi
         section = ctk.CTkFrame(parent, fg_color="#1E1E1E")
@@ -186,6 +198,10 @@ class SettingsPage(ctk.CTkFrame):
             "Otomatik Hesaplama": "auto_calculation"
         }
         return mapping.get(field_name)
+    
+    def open_user_management(self):
+        from .user_management_modal import UserManagementModal
+        modal = UserManagementModal(self)
     
     def create_backup(self):
         from ..utils.backup_manager import BackupManager
