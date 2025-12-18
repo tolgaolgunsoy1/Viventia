@@ -80,7 +80,8 @@ class PersonnelPage(ctk.CTkFrame):
             text="Düzenle", 
             width=60, 
             height=25,
-            fg_color="#2196F3"
+            fg_color="#2196F3",
+            command=lambda: self.edit_employee(employee[0])
         ).pack(side="left", padx=2)
         
         ctk.CTkButton(
@@ -88,7 +89,8 @@ class PersonnelPage(ctk.CTkFrame):
             text="Sil", 
             width=60, 
             height=25,
-            fg_color="#F44336"
+            fg_color="#F44336",
+            command=lambda: self.delete_employee(employee[0])
         ).pack(side="left", padx=2)
     
     def add_employee(self):
@@ -103,3 +105,46 @@ class PersonnelPage(ctk.CTkFrame):
         employees = self.db.get_employees()
         for emp in employees:
             self.create_employee_row(emp)
+    
+    def edit_employee(self, employee_id):
+        from .notification_system import NotificationSystem
+        NotificationSystem.show_success(self, "Bilgi", f"Personel düzenleme özelliği yakında eklenecek. ID: {employee_id}")
+    
+    def delete_employee(self, employee_id):
+        # Onay penceresi
+        confirm_window = ctk.CTkToplevel(self)
+        confirm_window.title("Personel Sil")
+        confirm_window.geometry("300x150")
+        confirm_window.configure(fg_color="#121212")
+        confirm_window.transient(self)
+        confirm_window.grab_set()
+        
+        ctk.CTkLabel(
+            confirm_window,
+            text="Bu personeli silmek istediğinizden emin misiniz?",
+            wraplength=250
+        ).pack(pady=20)
+        
+        btn_frame = ctk.CTkFrame(confirm_window, fg_color="transparent")
+        btn_frame.pack(pady=10)
+        
+        def confirm_delete():
+            self.db.delete_employee(employee_id)
+            self.refresh_employee_list()
+            confirm_window.destroy()
+            from .notification_system import NotificationSystem
+            NotificationSystem.show_success(self, "Başarılı", "Personel başarıyla silindi!")
+        
+        ctk.CTkButton(
+            btn_frame,
+            text="İptal",
+            fg_color="#666666",
+            command=confirm_window.destroy
+        ).pack(side="left", padx=5)
+        
+        ctk.CTkButton(
+            btn_frame,
+            text="Sil",
+            fg_color="#F44336",
+            command=confirm_delete
+        ).pack(side="left", padx=5)

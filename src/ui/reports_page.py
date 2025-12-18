@@ -25,7 +25,8 @@ class ReportsPage(ctk.CTkFrame):
             header,
             text="📊 Rapor Oluştur",
             fg_color="#50C878",
-            hover_color="#45B56B"
+            hover_color="#45B56B",
+            command=self.generate_report
         ).pack(side="right", padx=20, pady=20)
         
     def create_report_categories(self):
@@ -153,3 +154,7 @@ class ReportsPage(ctk.CTkFrame):
                 font=ctk.CTkFont(size=10),
                 text_color="#A0A0A0"
             ).pack(pady=(0, 15))
+    
+    def generate_report(self):
+        from .notification_system import NotificationSystem
+        NotificationSystem.show_success(self, "Başarılı", "Rapor oluşturma özelliği yakında eklenecek!")

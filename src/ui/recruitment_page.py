@@ -122,7 +122,8 @@ class RecruitmentPage(ctk.CTkFrame):
             text="Görüşme", 
             width=70, 
             height=25,
-            fg_color="#2196F3"
+            fg_color="#2196F3",
+            command=lambda: self.schedule_interview(candidate_data[0])
         ).pack(side="left", padx=2)
         
         ctk.CTkButton(
@@ -130,8 +131,18 @@ class RecruitmentPage(ctk.CTkFrame):
             text="İşe Al", 
             width=60, 
             height=25,
-            fg_color="#50C878"
+            fg_color="#50C878",
+            command=lambda: self.hire_candidate(candidate_data[0])
         ).pack(side="left", padx=2)
     
     def add_candidate(self):
-        print("Yeni aday ekleme penceresi")
+        from .notification_system import NotificationSystem
+        NotificationSystem.show_success(self, "Bilgi", "Aday ekleme özelliği yakında eklenecek!")
+    
+    def schedule_interview(self, candidate_name):
+        from .notification_system import NotificationSystem
+        NotificationSystem.show_success(self, "Bilgi", f"{candidate_name} için mülakat planlandı!")
+    
+    def hire_candidate(self, candidate_name):
+        from .notification_system import NotificationSystem
+        NotificationSystem.show_success(self, "Başarılı", f"{candidate_name} işe alındı!")

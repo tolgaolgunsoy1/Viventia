@@ -166,6 +166,17 @@ class Database:
                 "INSERT INTO employees (name, department, position, salary, hire_date, status, email, phone) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
                 sample_data
             )
+            
+            # Örnek izin verileri
+            leave_data = [
+                (1, "2024-04-15", "2024-04-19", "Yıllık İzin", "Tatil", "Bekliyor"),
+                (2, "2024-04-10", "2024-04-12", "Hastalık İzni", "Grip", "Onaylandı"),
+                (3, "2024-04-22", "2024-04-26", "Yıllık İzin", "Kişisel", "Bekliyor")
+            ]
+            cursor.executemany(
+                "INSERT INTO leaves (employee_id, start_date, end_date, leave_type, reason, status) VALUES (?, ?, ?, ?, ?, ?)",
+                leave_data
+            )
         
         conn.commit()
         conn.close()
@@ -193,3 +204,72 @@ class Database:
         
         conn.close()
         return total, active, pending_leaves
+    
+    def add_employee(self, data):
+        conn = sqlite3.connect(self.db_path)
+        cursor = conn.cursor()
+        
+        cursor.execute("""
+            INSERT INTO employees (name, department, position, salary, hire_date, email, phone, status)
+            VALUES (?, ?, ?, ?, ?, ?, ?, 'Aktif')
+        """, (data['name'], data['department'], data['position'], 
+               data['salary'], data['hire_date'], data['email'], data['phone']))
+        
+        conn.commit()
+        conn.close()
+        return cursor.lastrowid
+    
+    def delete_employee(self, employee_id):
+        conn = sqlite3.connect(self.db_path)
+        cursor = conn.cursor()
+        cursor.execute("DELETE FROM employees WHERE id = ?", (employee_id,))
+        conn.commit()
+        conn.close()
+    
+    def update_employee_status(self, employee_id, status):
+        conn = sqlite3.connect(self.db_path)
+        cursor = conn.cursor()
+        cursor.execute("UPDATE employees SET status = ? WHERE id = ?", (status, employee_id))
+        conn.commit()
+        conn.close()
+    
+    def add_leave_request(self, data):
+        conn = sqlite3.connect(self.db_path)
+        cursor = conn.cursor()
+        
+        cursor.execute("""
+            INSERT INTO leaves (employee_id, start_date, end_date, leave_type, reason, status)
+            VALUES (?, ?, ?, ?, ?, 'Bekliyor')
+        """, (data['employee_id'], data['start_date'], data['end_date'], 
+               data['leave_type'], data['reason']))
+        
+        conn.commit()
+        conn.close()
+    
+    def approve_leave(self, leave_id):
+        conn = sqlite3.connect(self.db_path)
+        cursor = conn.cursor()
+        cursor.execute("UPDATE leaves SET status = 'Onaylandı' WHERE id = ?", (leave_id,))
+        conn.commit()
+        conn.close()
+    
+    def reject_leave(self, leave_id):
+        conn = sqlite3.connect(self.db_path)
+        cursor = conn.cursor()
+        cursor.execute("UPDATE leaves SET status = 'Reddedildi' WHERE id = ?", (leave_id,))
+        conn.commit()
+        conn.close()
+    
+    def get_leaves(self):
+        conn = sqlite3.connect(self.db_path)
+        cursor = conn.cursor()
+        cursor.execute("""
+            SELECT l.id, e.name, l.leave_type, l.start_date, l.end_date, 
+                   l.reason, l.status
+            FROM leaves l
+            JOIN employees e ON l.employee_id = e.id
+            ORDER BY l.id DESC
+        """)
+        leaves = cursor.fetchall()
+        conn.close()
+        return leaves

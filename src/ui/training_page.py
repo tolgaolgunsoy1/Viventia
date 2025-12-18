@@ -23,7 +23,8 @@ class TrainingPage(ctk.CTkFrame):
             header,
             text="+ Eğitim Planla",
             fg_color="#50C878",
-            hover_color="#45B56B"
+            hover_color="#45B56B",
+            command=self.add_training
         ).pack(side="right", padx=20, pady=20)
         
     def create_training_stats(self):
@@ -132,3 +133,7 @@ class TrainingPage(ctk.CTkFrame):
                 text_color=color,
                 width=100
             ).grid(row=0, column=i, padx=8, pady=8)
+    
+    def add_training(self):
+        from .notification_system import NotificationSystem
+        NotificationSystem.show_success(self, "Bilgi", "Eğitim planlama özelliği yakında eklenecek!")

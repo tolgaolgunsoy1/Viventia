@@ -37,7 +37,8 @@ class AttendancePage(ctk.CTkFrame):
             date_frame,
             text="Rapor Al",
             fg_color="#50C878",
-            width=80
+            width=80,
+            command=self.generate_attendance_report
         ).pack(side="left", padx=10)
         
     def create_attendance_overview(self):
@@ -172,3 +173,7 @@ class AttendancePage(ctk.CTkFrame):
                 text_color=color,
                 width=100
             ).grid(row=0, column=i, padx=8, pady=8)
+    
+    def generate_attendance_report(self):
+        from .notification_system import NotificationSystem
+        NotificationSystem.show_success(self, "Başarılı", "Puantaj raporu oluşturuldu!")

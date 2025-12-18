@@ -34,7 +34,8 @@ class PerformancePage(ctk.CTkFrame):
             controls_frame,
             text="+ Yeni Değerlendirme",
             fg_color="#50C878",
-            hover_color="#45B56B"
+            hover_color="#45B56B",
+            command=self.add_evaluation
         ).pack(side="left", padx=10)
         
     def create_performance_overview(self):
@@ -146,3 +147,7 @@ class PerformancePage(ctk.CTkFrame):
                 text_color=color,
                 width=120
             ).grid(row=0, column=i, padx=10, pady=8)
+    
+    def add_evaluation(self):
+        from .notification_system import NotificationSystem
+        NotificationSystem.show_success(self, "Bilgi", "Performans değerlendirme özelliği yakında eklenecek!")

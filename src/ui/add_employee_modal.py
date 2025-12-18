@@ -114,7 +114,7 @@ class AddEmployeeModal(ctk.CTkToplevel):
         data["hire_date"] = self.date_entry.get().strip()
         
         # Validasyon
-        if not all([data["name"], data["department"], data["position"]]):
+        if not all([data["name"], data["position"]]):
             self.show_error("Lütfen zorunlu alanları doldurun!")
             return
             
@@ -126,25 +126,15 @@ class AddEmployeeModal(ctk.CTkToplevel):
             
         # Veritabanına kaydet
         try:
-            conn = self.db.db_path
-            import sqlite3
-            conn = sqlite3.connect(self.db.db_path)
-            cursor = conn.cursor()
-            
-            cursor.execute("""
-                INSERT INTO employees (name, department, position, salary, hire_date, email, phone, status)
-                VALUES (?, ?, ?, ?, ?, ?, ?, 'Aktif')
-            """, (
-                data["name"], data["department"], data["position"], 
-                data["salary"], data["hire_date"], data["email"], data["phone"]
-            ))
-            
-            conn.commit()
-            conn.close()
+            self.db.add_employee(data)
             
             # Callback çağır
             if self.callback:
                 self.callback()
+            
+            # Başarı mesajı
+            from .notification_system import NotificationSystem
+            NotificationSystem.show_success(self.master, "Başarılı", "Personel başarıyla eklendi!")
                 
             self.destroy()
             
