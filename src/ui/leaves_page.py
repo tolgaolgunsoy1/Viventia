@@ -3,7 +3,7 @@ from datetime import datetime, timedelta
 
 class LeavesPage(ctk.CTkFrame):
     def __init__(self, parent):
-        super().__init__(parent, fg_color="#1A1A1A")
+        super().__init__(parent, fg_color="#F8F9FA")
         
         # Başlık ve filtreler
         self.create_header()
@@ -39,8 +39,8 @@ class LeavesPage(ctk.CTkFrame):
         ctk.CTkButton(
             controls_frame,
             text="+ Yeni İzin",
-            fg_color="#4ECDC4",
-            hover_color="#45B7B8",
+            fg_color="#2C3E50",
+            hover_color="#34495E",
             width=100,
             command=self.add_leave
         ).pack(side="left", padx=10)
@@ -51,7 +51,7 @@ class LeavesPage(ctk.CTkFrame):
         
         stats = [
             ("Bekleyen Talepler", "8", "#FF9800"),
-            ("Bu Ay Onaylanan", "15", "#4ECDC4"),
+            ("Bu Ay Onaylanan", "15", "#28A745"),
             ("Toplam İzin Günü", "142", "#2196F3"),
             ("Ortalama İzin", "9.5 gün", "#9C27B0")
         ]
@@ -146,7 +146,7 @@ class LeavesPage(ctk.CTkFrame):
                 if value == "Bekliyor":
                     color = "#FF9800"
                 elif value == "Onaylandı":
-                    color = "#4ECDC4"
+                    color = "#28A745"
                 else:
                     color = "#F44336"
             else:
@@ -169,7 +169,7 @@ class LeavesPage(ctk.CTkFrame):
                 text="Onayla", 
                 width=60, 
                 height=25,
-                fg_color="#4ECDC4",
+                fg_color="#28A745",
                 command=lambda: self.approve_leave(leave_data[0])
             ).pack(side="left", padx=2)
             

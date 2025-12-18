@@ -2,7 +2,7 @@ import customtkinter as ctk
 
 class Sidebar(ctk.CTkFrame):
     def __init__(self, parent, auth_manager=None):
-        super().__init__(parent, fg_color="#2B2B2B", width=250)
+        super().__init__(parent, fg_color="#2C3E50", width=250)
         
         self.parent = parent
         self.auth_manager = auth_manager
@@ -13,7 +13,7 @@ class Sidebar(ctk.CTkFrame):
             self, 
             text="VIVENTIA", 
             font=ctk.CTkFont(size=24, weight="bold"),
-            text_color="#4ECDC4"
+            text_color="#FFFFFF"
         )
         self.logo_label.pack(pady=(30, 50))
         
@@ -40,7 +40,7 @@ class Sidebar(ctk.CTkFrame):
                 text=f"{icon}  {name}",
                 font=ctk.CTkFont(size=14),
                 fg_color="transparent",
-                hover_color="#4ECDC4",
+                hover_color="#34495E",
                 anchor="w",
                 height=50,
                 command=lambda n=name: self.button_click(n)
@@ -49,15 +49,15 @@ class Sidebar(ctk.CTkFrame):
             self.buttons[name] = btn
         
         # İlk buton seçili
-        self.buttons["Dashboard"].configure(fg_color="#4ECDC4")
+        self.buttons["Dashboard"].configure(fg_color="#34495E")
         
         # Çıkış butonu
         exit_btn = ctk.CTkButton(
             self,
             text="🚪 Çıkış",
             font=ctk.CTkFont(size=14),
-            fg_color="#E74C3C",
-            hover_color="#C0392B",
+            fg_color="#DC3545",
+            hover_color="#C82333",
             height=50,
             command=self.exit_app
         )
@@ -70,7 +70,7 @@ class Sidebar(ctk.CTkFrame):
                 btn.configure(fg_color="transparent")
             
             # Seçili butonu vurgula
-            self.buttons[name].configure(fg_color="#4ECDC4")
+            self.buttons[name].configure(fg_color="#34495E")
             
             # Ana pencereye bildir
             self.after_idle(lambda: self.parent.show_page(name))

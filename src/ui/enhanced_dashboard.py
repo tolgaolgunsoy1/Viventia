@@ -7,13 +7,13 @@ from ..database.database import Database
 
 class EnhancedDashboard(ctk.CTkFrame):
     def __init__(self, parent):
-        super().__init__(parent, fg_color="#1A1A1A")
+        super().__init__(parent, fg_color="#F8F9FA")
         self.db = Database()
         
         # Ana scroll frame
         self.main_scroll = ctk.CTkScrollableFrame(
             self, 
-            fg_color="#1A1A1A",
+            fg_color="#F8F9FA",
             scrollbar_button_color="#4ECDC4",
             scrollbar_button_hover_color="#45B7B8"
         )
@@ -27,7 +27,7 @@ class EnhancedDashboard(ctk.CTkFrame):
         
     def create_welcome_section(self):
         """Hoşgeldin bölümü"""
-        welcome_frame = ctk.CTkFrame(self.main_scroll, fg_color="#1A1A1A", corner_radius=15, height=120)
+        welcome_frame = ctk.CTkFrame(self.main_scroll, fg_color="#FFFFFF", corner_radius=8, height=120)
         welcome_frame.pack(fill="x", pady=(0, 20))
         welcome_frame.pack_propagate(False)
         
@@ -47,7 +47,7 @@ class EnhancedDashboard(ctk.CTkFrame):
             left_frame,
             text=f"{greeting}! 👋",
             font=ctk.CTkFont(size=24, weight="bold"),
-            text_color="#4ECDC4",
+            text_color="#2C3E50",
             anchor="w"
         ).pack(anchor="w")
         
@@ -130,8 +130,8 @@ class EnhancedDashboard(ctk.CTkFrame):
                 "title": "Toplam Personel",
                 "value": str(total),
                 "icon": "👥",
-                "color": "#4ECDC4",
-                "bg_color": "#1A2F2F"
+                "color": "#2C3E50",
+                "bg_color": "#E9ECEF"
             },
             {
                 "title": "Aktif Çalışan",
@@ -256,7 +256,7 @@ class EnhancedDashboard(ctk.CTkFrame):
             if status_counts:
                 labels = list(status_counts.keys())
                 sizes = list(status_counts.values())
-                colors = ['#4ECDC4', '#E67E22', '#E74C3C', '#3498DB'][:len(labels)]
+                colors = ['#2C3E50', '#6C757D', '#ADB5BD', '#DEE2E6'][:len(labels)]
             else:
                 labels = ['Veri Yok']
                 sizes = [1]
@@ -265,7 +265,7 @@ class EnhancedDashboard(ctk.CTkFrame):
         except Exception as e:
             labels = ['Aktif', 'İzinli', 'Pasif']
             sizes = [70, 20, 10]
-            colors = ['#4ECDC4', '#E67E22', '#E74C3C']
+            colors = ['#2C3E50', '#6C757D', '#ADB5BD']
         
         # Donut chart oluştur
         wedges, texts, autotexts = ax.pie(
@@ -324,7 +324,7 @@ class EnhancedDashboard(ctk.CTkFrame):
             counts = [15, 8, 12, 6, 9]
         
         # Bar chart oluştur
-        bars = ax.bar(departments, counts, color='#4ECDC4', alpha=0.8, edgecolor='#45B7B8')
+        bars = ax.bar(departments, counts, color='#2C3E50', alpha=0.8, edgecolor='#34495E')
         
         # Grafik stilini ayarla
         ax.set_xlabel('Departmanlar', color='white', fontsize=10)

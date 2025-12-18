@@ -4,7 +4,7 @@ from .add_employee_modal import AddEmployeeModal
 
 class PersonnelPage(ctk.CTkFrame):
     def __init__(self, parent):
-        super().__init__(parent, fg_color="#1A1A1A")
+        super().__init__(parent, fg_color="#F8F9FA")
         try:
             self.db = Database()
         except:
@@ -30,7 +30,7 @@ class PersonnelPage(ctk.CTkFrame):
         ctk.CTkButton(
             header,
             text="+ Yeni Personel",
-            fg_color="#4ECDC4",
+            fg_color="#2C3E50",
             hover_color="#45B56B",
             command=self.add_employee
         ).pack(side="right", padx=20, pady=20)
@@ -78,7 +78,7 @@ class PersonnelPage(ctk.CTkFrame):
         data = [employee[1], employee[2], employee[3], f"{employee[4]:,.0f} ₺", employee[6]]
         
         for i, value in enumerate(data):
-            color = "#4ECDC4" if value == "Aktif" else "#E67E22" if value == "İzinli" else "#FFFFFF"
+            color = "#28A745" if value == "Aktif" else "#FFC107" if value == "İzinli" else "#2C3E50"
             ctk.CTkLabel(
                 row_frame, 
                 text=str(value), 
