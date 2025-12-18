@@ -21,8 +21,13 @@ class Sidebar(ctk.CTkFrame):
         menu_items = [
             ("Dashboard", "🏠"),
             ("Personel", "👥"),
+            ("İşe Alım", "🎯"),
+            ("Puantaj", "⏰"),
             ("Bordro", "💰"),
             ("İzinler", "📅"),
+            ("Performans", "📊"),
+            ("Eğitim", "📚"),
+            ("Raporlar", "📊"),
             ("Ayarlar", "⚙️")
         ]
         

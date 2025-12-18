@@ -2,8 +2,13 @@ import customtkinter as ctk
 from .sidebar import Sidebar
 from .dashboard import Dashboard
 from .personnel_page import PersonnelPage
+from .recruitment_page import RecruitmentPage
+from .attendance_page import AttendancePage
 from .payroll_page import PayrollPage
 from .leaves_page import LeavesPage
+from .performance_page import PerformancePage
+from .training_page import TrainingPage
+from .reports_page import ReportsPage
 from .settings_page import SettingsPage
 
 class MainWindow(ctk.CTk):
@@ -41,10 +46,20 @@ class MainWindow(ctk.CTk):
                 self.pages[page_name] = Dashboard(self)
             elif page_name == "Personel":
                 self.pages[page_name] = PersonnelPage(self)
+            elif page_name == "İşe Alım":
+                self.pages[page_name] = RecruitmentPage(self)
+            elif page_name == "Puantaj":
+                self.pages[page_name] = AttendancePage(self)
             elif page_name == "Bordro":
                 self.pages[page_name] = PayrollPage(self)
             elif page_name == "İzinler":
                 self.pages[page_name] = LeavesPage(self)
+            elif page_name == "Performans":
+                self.pages[page_name] = PerformancePage(self)
+            elif page_name == "Eğitim":
+                self.pages[page_name] = TrainingPage(self)
+            elif page_name == "Raporlar":
+                self.pages[page_name] = ReportsPage(self)
             elif page_name == "Ayarlar":
                 self.pages[page_name] = SettingsPage(self)
             else:
