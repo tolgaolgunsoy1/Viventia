@@ -3,7 +3,7 @@ from datetime import datetime, timedelta
 
 class LeavesPage(ctk.CTkFrame):
     def __init__(self, parent):
-        super().__init__(parent, fg_color="#F8F9FA")
+        super().__init__(parent, fg_color="#FFFFFF")
         
         # Başlık ve filtreler
         self.create_header()

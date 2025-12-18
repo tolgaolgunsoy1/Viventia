@@ -24,7 +24,7 @@ class MainWindow(ctk.CTk):
         # Pencere ayarları
         self.title("Viventia - İnsan Kaynakları Yönetim Sistemi")
         self.geometry("1500x950")
-        self.configure(fg_color="#F8F9FA")
+        self.configure(fg_color="#FFFFFF")
         
         # Pencere ikonunu ayarla
         try:
@@ -111,7 +111,7 @@ class MainWindow(ctk.CTk):
     
     def create_top_bar(self):
         """Üst bar oluşturma"""
-        top_bar = ctk.CTkFrame(self, fg_color="#FFFFFF", height=70, corner_radius=0)
+        top_bar = ctk.CTkFrame(self, fg_color="#F8F9FA", height=70, corner_radius=0)
         top_bar.grid(row=0, column=1, sticky="ew", padx=20, pady=(20, 0))
         top_bar.grid_propagate(False)
         

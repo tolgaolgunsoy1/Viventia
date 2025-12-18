@@ -6,7 +6,7 @@ from ..database.database import Database
 
 class Dashboard(ctk.CTkFrame):
     def __init__(self, parent):
-        super().__init__(parent, fg_color="#1A1A1A")
+        super().__init__(parent, fg_color="#FFFFFF")
         try:
             self.db = Database()
         except:

@@ -4,7 +4,7 @@ from .add_employee_modal import AddEmployeeModal
 
 class PersonnelPage(ctk.CTkFrame):
     def __init__(self, parent):
-        super().__init__(parent, fg_color="#F8F9FA")
+        super().__init__(parent, fg_color="#FFFFFF")
         try:
             self.db = Database()
         except:

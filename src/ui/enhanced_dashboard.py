@@ -7,13 +7,13 @@ from ..database.database import Database
 
 class EnhancedDashboard(ctk.CTkFrame):
     def __init__(self, parent):
-        super().__init__(parent, fg_color="#F8F9FA")
+        super().__init__(parent, fg_color="#FFFFFF")
         self.db = Database()
         
         # Ana scroll frame
         self.main_scroll = ctk.CTkScrollableFrame(
             self, 
-            fg_color="#F8F9FA",
+            fg_color="#FFFFFF",
             scrollbar_button_color="#4ECDC4",
             scrollbar_button_hover_color="#45B7B8"
         )
@@ -27,7 +27,7 @@ class EnhancedDashboard(ctk.CTkFrame):
         
     def create_welcome_section(self):
         """Hoşgeldin bölümü"""
-        welcome_frame = ctk.CTkFrame(self.main_scroll, fg_color="#FFFFFF", corner_radius=8, height=120)
+        welcome_frame = ctk.CTkFrame(self.main_scroll, fg_color="#F8F9FA", corner_radius=8, height=120)
         welcome_frame.pack(fill="x", pady=(0, 20))
         welcome_frame.pack_propagate(False)
         
@@ -209,13 +209,13 @@ class EnhancedDashboard(ctk.CTkFrame):
         charts_container.pack(fill="x")
         
         # Sol grafik - Personel durumu (Donut Chart)
-        left_chart_frame = ctk.CTkFrame(charts_container, fg_color="#FFFFFF", corner_radius=8)
+        left_chart_frame = ctk.CTkFrame(charts_container, fg_color="#F8F9FA", corner_radius=8)
         left_chart_frame.pack(side="left", fill="both", expand=True, padx=(0, 10))
         
         self.create_status_chart(left_chart_frame)
         
         # Sağ grafik - Departman dağılımı (Bar Chart)
-        right_chart_frame = ctk.CTkFrame(charts_container, fg_color="#FFFFFF", corner_radius=8)
+        right_chart_frame = ctk.CTkFrame(charts_container, fg_color="#F8F9FA", corner_radius=8)
         right_chart_frame.pack(side="right", fill="both", expand=True, padx=(10, 0))
         
         self.create_department_chart(right_chart_frame)
@@ -341,7 +341,7 @@ class EnhancedDashboard(ctk.CTkFrame):
     
     def create_recent_activities(self):
         """Son aktiviteler"""
-        activities_frame = ctk.CTkFrame(self.main_scroll, fg_color="#FFFFFF", corner_radius=8)
+        activities_frame = ctk.CTkFrame(self.main_scroll, fg_color="#F8F9FA", corner_radius=8)
         activities_frame.pack(fill="x", pady=(0, 20))
         
         # Başlık
@@ -394,7 +394,7 @@ class EnhancedDashboard(ctk.CTkFrame):
         ]
         
         for activity in activities:
-            activity_item = ctk.CTkFrame(activities_list, fg_color="#F8F9FA", corner_radius=8)
+            activity_item = ctk.CTkFrame(activities_list, fg_color="#FFFFFF", corner_radius=8)
             activity_item.pack(fill="x", pady=3)
             
             # İçerik
