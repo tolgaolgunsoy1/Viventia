@@ -129,37 +129,32 @@ class EnhancedDashboard(ctk.CTkFrame):
             {
                 "title": "Toplam Personel",
                 "value": str(total),
-                "icon": "👥",
                 "color": "#2C3E50",
-                "bg_color": "#E9ECEF"
+                "bg_color": "#FFFFFF"
             },
             {
                 "title": "Aktif Çalışan",
                 "value": str(active),
-                "icon": "✅",
-                "color": "#4CAF50",
-                "bg_color": "#1A2A1A"
+                "color": "#28A745",
+                "bg_color": "#FFFFFF"
             },
             {
                 "title": "Bekleyen İzinler",
                 "value": str(pending_leaves),
-                "icon": "📅",
-                "color": "#FF9800",
-                "bg_color": "#2A1F0A"
+                "color": "#FFC107",
+                "bg_color": "#FFFFFF"
             },
             {
                 "title": "Departman Sayısı",
                 "value": str(dept_count),
-                "icon": "🏢",
-                "color": "#2196F3",
-                "bg_color": "#0A1A2A"
+                "color": "#17A2B8",
+                "bg_color": "#FFFFFF"
             },
             {
                 "title": "Bu Ay Yeni",
                 "value": str(new_hires),
-                "icon": "🆕",
-                "color": "#9C27B0",
-                "bg_color": "#2A0A2A"
+                "color": "#6C757D",
+                "bg_color": "#FFFFFF"
             }
         ]
         
@@ -168,35 +163,28 @@ class EnhancedDashboard(ctk.CTkFrame):
             card = ctk.CTkFrame(
                 cards_container, 
                 fg_color=card_data["bg_color"], 
-                corner_radius=15,
+                corner_radius=8,
                 width=200,
-                height=120
+                height=100
             )
             card.grid(row=0, column=i, padx=10, pady=5, sticky="ew")
             card.pack_propagate(False)
-            
-            # İkon
-            ctk.CTkLabel(
-                card,
-                text=card_data["icon"],
-                font=ctk.CTkFont(size=24)
-            ).pack(pady=(15, 5))
             
             # Değer
             ctk.CTkLabel(
                 card,
                 text=card_data["value"],
-                font=ctk.CTkFont(size=28, weight="bold"),
+                font=ctk.CTkFont(size=32, weight="bold"),
                 text_color=card_data["color"]
-            ).pack(pady=(0, 2))
+            ).pack(pady=(20, 5))
             
             # Başlık
             ctk.CTkLabel(
                 card,
                 text=card_data["title"],
-                font=ctk.CTkFont(size=11),
-                text_color="#CCCCCC"
-            ).pack(pady=(0, 15))
+                font=ctk.CTkFont(size=12),
+                text_color="#6C757D"
+            ).pack(pady=(0, 20))
         
         # Grid yapılandırması
         for i in range(5):
@@ -221,13 +209,13 @@ class EnhancedDashboard(ctk.CTkFrame):
         charts_container.pack(fill="x")
         
         # Sol grafik - Personel durumu (Donut Chart)
-        left_chart_frame = ctk.CTkFrame(charts_container, fg_color="#1A1A1A", corner_radius=15)
+        left_chart_frame = ctk.CTkFrame(charts_container, fg_color="#FFFFFF", corner_radius=8)
         left_chart_frame.pack(side="left", fill="both", expand=True, padx=(0, 10))
         
         self.create_status_chart(left_chart_frame)
         
         # Sağ grafik - Departman dağılımı (Bar Chart)
-        right_chart_frame = ctk.CTkFrame(charts_container, fg_color="#1A1A1A", corner_radius=15)
+        right_chart_frame = ctk.CTkFrame(charts_container, fg_color="#FFFFFF", corner_radius=8)
         right_chart_frame.pack(side="right", fill="both", expand=True, padx=(10, 0))
         
         self.create_department_chart(right_chart_frame)
@@ -353,7 +341,7 @@ class EnhancedDashboard(ctk.CTkFrame):
     
     def create_recent_activities(self):
         """Son aktiviteler"""
-        activities_frame = ctk.CTkFrame(self.main_scroll, fg_color="#1A1A1A", corner_radius=15)
+        activities_frame = ctk.CTkFrame(self.main_scroll, fg_color="#FFFFFF", corner_radius=8)
         activities_frame.pack(fill="x", pady=(0, 20))
         
         # Başlık
@@ -414,11 +402,11 @@ class EnhancedDashboard(ctk.CTkFrame):
         ]
         
         for activity in activities:
-            activity_item = ctk.CTkFrame(activities_list, fg_color="#2A2A2A", corner_radius=10)
+            activity_item = ctk.CTkFrame(activities_list, fg_color="#F8F9FA", corner_radius=8)
             activity_item.pack(fill="x", pady=5)
             
             # Sol taraf - ikon
-            icon_frame = ctk.CTkFrame(activity_item, fg_color=activity["color"], corner_radius=20, width=40, height=40)
+            icon_frame = ctk.CTkFrame(activity_item, fg_color="#2C3E50", corner_radius=20, width=40, height=40)
             icon_frame.pack(side="left", padx=15, pady=15)
             icon_frame.pack_propagate(False)
             
@@ -478,29 +466,29 @@ class EnhancedDashboard(ctk.CTkFrame):
         # Hızlı işlem butonları
         quick_actions = [
             {
-                "text": "👤 Yeni Personel",
-                "color": "#4ECDC4",
-                "hover_color": "#45B7B8"
+                "text": "Yeni Personel",
+                "color": "#2C3E50",
+                "hover_color": "#34495E"
             },
             {
-                "text": "📅 İzin Talebi",
-                "color": "#3498DB",
-                "hover_color": "#2980B9"
+                "text": "İzin Talebi",
+                "color": "#2C3E50",
+                "hover_color": "#34495E"
             },
             {
-                "text": "💰 Bordro İşle",
-                "color": "#E67E22",
-                "hover_color": "#D35400"
+                "text": "Bordro İşle",
+                "color": "#2C3E50",
+                "hover_color": "#34495E"
             },
             {
-                "text": "📊 Rapor Al",
-                "color": "#9B59B6",
-                "hover_color": "#8E44AD"
+                "text": "Rapor Al",
+                "color": "#2C3E50",
+                "hover_color": "#34495E"
             },
             {
-                "text": "⚙️ Ayarlar",
-                "color": "#607D8B",
-                "hover_color": "#455A64"
+                "text": "Ayarlar",
+                "color": "#2C3E50",
+                "hover_color": "#34495E"
             }
         ]
         
