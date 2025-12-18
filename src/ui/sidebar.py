@@ -29,6 +29,7 @@ class Sidebar(ctk.CTkFrame):
             ("Performans", "📊"),
             ("Eğitim", "📚"),
             ("Raporlar", "📊"),
+            ("Yedekleme", "💾"),
             ("Ayarlar", "⚙️")
         ]
         

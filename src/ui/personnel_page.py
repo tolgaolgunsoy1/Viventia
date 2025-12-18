@@ -1,5 +1,5 @@
 import customtkinter as ctk
-from ..database.database import Database
+from ..database.database import Database, DatabaseError
 from .add_employee_modal import AddEmployeeModal
 
 class PersonnelPage(ctk.CTkFrame):
@@ -51,9 +51,13 @@ class PersonnelPage(ctk.CTkFrame):
             ).grid(row=0, column=i, padx=10, pady=10, sticky="w")
         
         # Personel verileri
-        employees = self.db.get_employees()
-        for emp in employees:
-            self.create_employee_row(emp)
+        try:
+            employees = self.db.get_employees()
+            for emp in employees:
+                self.create_employee_row(emp)
+        except DatabaseError as e:
+            from .notification_system import NotificationSystem
+            NotificationSystem.show_error(self, "Hata", f"Personel verileri yüklenemedi: {str(e)}")
             
     def create_employee_row(self, employee):
         row_frame = ctk.CTkFrame(self.scrollable_frame, fg_color="#1A1A1A")
@@ -133,11 +137,15 @@ class PersonnelPage(ctk.CTkFrame):
         btn_frame.pack(pady=10)
         
         def confirm_delete():
-            self.db.delete_employee(employee_id)
-            self.refresh_employee_list()
-            confirm_window.destroy()
-            from .notification_system import NotificationSystem
-            NotificationSystem.show_success(self, "Başarılı", "Personel başarıyla silindi!")
+            try:
+                self.db.delete_employee(employee_id)
+                self.refresh_employee_list()
+                confirm_window.destroy()
+                from .notification_system import NotificationSystem
+                NotificationSystem.show_success(self, "Başarılı", "Personel başarıyla silindi!")
+            except DatabaseError as e:
+                from .notification_system import NotificationSystem
+                NotificationSystem.show_error(self, "Hata", str(e))
         
         ctk.CTkButton(
             btn_frame,

@@ -1,5 +1,6 @@
 import customtkinter as ctk
-from ..database.database import Database
+from ..database.database import Database, DatabaseError
+from ..utils.validators import Validators
 
 class AddEmployeeModal(ctk.CTkToplevel):
     def __init__(self, parent, callback=None):
@@ -109,52 +110,69 @@ class AddEmployeeModal(ctk.CTkToplevel):
         data = {}
         for key, entry in self.entries.items():
             data[key] = entry.get().strip()
-            
+
         data["department"] = self.dept_combo.get()
         data["hire_date"] = self.date_entry.get().strip()
-        
+
         # Gelişmiş validasyon
-        from ..utils.validators import Validators
-        
-        if not all([data["name"], data["position"]]):
-            self.show_error("Lütfen zorunlu alanları doldurun!")
+        if not Validators.validate_name(data["name"]):
+            self.show_error("Lütfen geçerli bir ad soyad girin!")
             return
-        
+
+        if not data["department"] or data["department"] == "Departman Seç":
+            self.show_error("Lütfen bir departman seçin!")
+            return
+
+        if not data["position"]:
+            self.show_error("Lütfen pozisyon bilgisini girin!")
+            return
+
         if data["email"] and not Validators.validate_email(data["email"]):
             self.show_error("Geçerli bir e-posta adresi girin!")
             return
-        
+
         if data["phone"] and not Validators.validate_phone(data["phone"]):
-            self.show_error("Geçerli bir telefon numarası girin! (05XXXXXXXXX)")
+            self.show_error("Geçerli bir telefon numarası girin! (05XX XXX XX XX)")
             return
-            
+
         if not Validators.validate_salary(data["salary"]):
             self.show_error("Geçerli bir maaş tutarı girin! (0-1.000.000)")
             return
-        
-        data["salary"] = float(data["salary"]) if data["salary"] else 0
-        
+
+        if data["hire_date"] and not Validators.validate_date(data["hire_date"]):
+            self.show_error("Geçerli bir tarih girin! (YYYY-MM-DD)")
+            return
+
+        # Maaşı float'a çevir
+        try:
+            data["salary"] = float(data["salary"]) if data["salary"] else 0
+        except ValueError:
+            self.show_error("Maaş tutarı sayı olmalıdır!")
+            return
+
         # Güvenlik için input sanitization
         for key in data:
             if isinstance(data[key], str):
                 data[key] = Validators.sanitize_input(data[key])
-            
+
         # Veritabanına kaydet
         try:
             self.db.add_employee(data)
-            
+
             # Callback çağır
             if self.callback:
                 self.callback()
-            
+
             # Başarı mesajı
             from .notification_system import NotificationSystem
             NotificationSystem.show_success(self.master, "Başarılı", "Personel başarıyla eklendi!")
-                
+
             self.destroy()
-            
-        except Exception as e:
+
+        except DatabaseError as e:
             self.show_error(f"Kayıt hatası: {str(e)}")
+        except Exception as e:
+            self.show_error(f"Beklenmeyen hata: {str(e)}")
             
     def show_error(self, message):
         error_window = ctk.CTkToplevel(self)
