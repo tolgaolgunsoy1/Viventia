@@ -68,10 +68,13 @@ class MainWindow(ctk.CTk):
                 self.pages[page_name] = RecruitmentPage(self)
             elif page_name == "Puantaj":
                 self.pages[page_name] = AttendancePage(self)
+
             elif page_name == "Bordro":
-                self.pages[page_name] = PayrollPage(self)
+                from .enhanced_payroll import EnhancedPayrollPage
+                self.pages[page_name] = EnhancedPayrollPage(self)
             elif page_name == "İzinler":
-                self.pages[page_name] = LeavesPage(self)
+                from .enhanced_leaves import EnhancedLeavesPage
+                self.pages[page_name] = EnhancedLeavesPage(self)
             elif page_name == "Performans":
                 self.pages[page_name] = PerformancePage(self)
             elif page_name == "Eğitim":
