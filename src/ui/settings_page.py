@@ -56,16 +56,37 @@ class SettingsPage(ctk.CTkFrame):
             ("Otomatik Hesaplama", "switch", current_settings.get("auto_calculation", True))
         ])
         
-        # Kaydet butonu
+        # Butonlar
+        btn_frame = ctk.CTkFrame(container, fg_color="transparent")
+        btn_frame.pack(pady=30)
+        
         ctk.CTkButton(
-            container,
+            btn_frame,
             text="Ayarları Kaydet",
             fg_color="#50C878",
             hover_color="#45B56B",
             height=40,
             font=ctk.CTkFont(size=14, weight="bold"),
             command=self.save_settings
-        ).pack(pady=30)
+        ).pack(side="left", padx=10)
+        
+        ctk.CTkButton(
+            btn_frame,
+            text="Yedek Oluştur",
+            fg_color="#2196F3",
+            hover_color="#1976D2",
+            height=40,
+            command=self.create_backup
+        ).pack(side="left", padx=10)
+        
+        ctk.CTkButton(
+            btn_frame,
+            text="Yedek Geri Yükle",
+            fg_color="#FF9800",
+            hover_color="#F57C00",
+            height=40,
+            command=self.restore_backup
+        ).pack(side="left", padx=10)
         
     def create_section(self, parent, title, settings):
         # Bölüm çerçevesi
@@ -165,3 +186,52 @@ class SettingsPage(ctk.CTkFrame):
             "Otomatik Hesaplama": "auto_calculation"
         }
         return mapping.get(field_name)
+    
+    def create_backup(self):
+        from ..utils.backup_manager import BackupManager
+        
+        try:
+            backup_manager = BackupManager()
+            backup_path = backup_manager.create_backup()
+            
+            from .notification_system import NotificationSystem
+            NotificationSystem.show_success(self, "Başarılı", f"Yedek oluşturuldu:\n{backup_path}")
+            
+        except Exception as e:
+            from .notification_system import NotificationSystem
+            NotificationSystem.show_error(self, "Hata", str(e))
+    
+    def restore_backup(self):
+        from ..utils.backup_manager import BackupManager
+        import tkinter.filedialog as fd
+        
+        try:
+            backup_manager = BackupManager()
+            backups = backup_manager.list_backups()
+            
+            if not backups:
+                from .notification_system import NotificationSystem
+                NotificationSystem.show_error(self, "Hata", "Hiç yedek dosyası bulunamadı!")
+                return
+            
+            # Basit dosya seçici
+            backup_path = fd.askopenfilename(
+                title="Yedek Dosyası Seçin",
+                filetypes=[("Veritabanı Dosyaları", "*.db")],
+                initialdir="backups"
+            )
+            
+            if backup_path:
+                backup_manager.restore_backup(backup_path)
+                
+                from .notification_system import NotificationSystem
+                NotificationSystem.show_success(self, "Başarılı", "Yedek başarıyla geri yüklendi!\nUygulama yeniden başlatılacak.")
+                
+                # Uygulamayı yeniden başlat
+                import sys
+                import os
+                os.execl(sys.executable, sys.executable, *sys.argv)
+            
+        except Exception as e:
+            from .notification_system import NotificationSystem
+            NotificationSystem.show_error(self, "Hata", str(e))

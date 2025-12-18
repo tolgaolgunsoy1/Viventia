@@ -1,10 +1,11 @@
 import customtkinter as ctk
 
 class Sidebar(ctk.CTkFrame):
-    def __init__(self, parent):
+    def __init__(self, parent, auth_manager=None):
         super().__init__(parent, fg_color="#1E1E1E", width=250)
         
         self.parent = parent
+        self.auth_manager = auth_manager
         self.grid_propagate(False)
         
         # Logo

@@ -113,16 +113,31 @@ class AddEmployeeModal(ctk.CTkToplevel):
         data["department"] = self.dept_combo.get()
         data["hire_date"] = self.date_entry.get().strip()
         
-        # Validasyon
+        # Gelişmiş validasyon
+        from ..utils.validators import Validators
+        
         if not all([data["name"], data["position"]]):
             self.show_error("Lütfen zorunlu alanları doldurun!")
             return
-            
-        try:
-            data["salary"] = float(data["salary"]) if data["salary"] else 0
-        except ValueError:
-            self.show_error("Geçerli bir maaş tutarı girin!")
+        
+        if data["email"] and not Validators.validate_email(data["email"]):
+            self.show_error("Geçerli bir e-posta adresi girin!")
             return
+        
+        if data["phone"] and not Validators.validate_phone(data["phone"]):
+            self.show_error("Geçerli bir telefon numarası girin! (05XXXXXXXXX)")
+            return
+            
+        if not Validators.validate_salary(data["salary"]):
+            self.show_error("Geçerli bir maaş tutarı girin! (0-1.000.000)")
+            return
+        
+        data["salary"] = float(data["salary"]) if data["salary"] else 0
+        
+        # Güvenlik için input sanitization
+        for key in data:
+            if isinstance(data[key], str):
+                data[key] = Validators.sanitize_input(data[key])
             
         # Veritabanına kaydet
         try:

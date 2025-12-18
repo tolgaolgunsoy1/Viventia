@@ -12,8 +12,9 @@ from .reports_page import ReportsPage
 from .settings_page import SettingsPage
 
 class MainWindow(ctk.CTk):
-    def __init__(self):
+    def __init__(self, auth_manager=None):
         super().__init__()
+        self.auth_manager = auth_manager
         
         # Pencere ayarları
         self.title("Viventia - İnsan Kaynakları Yönetim Sistemi")
@@ -25,8 +26,11 @@ class MainWindow(ctk.CTk):
         self.grid_rowconfigure(0, weight=1)
         
         # Bileşenler
-        self.sidebar = Sidebar(self)
+        self.sidebar = Sidebar(self, self.auth_manager)
         self.sidebar.grid(row=0, column=0, sticky="nsew")
+        
+        # Üst bar - kullanıcı bilgisi
+        self.create_top_bar()
         
         # Sayfalar
         self.pages = {}
@@ -73,4 +77,31 @@ class MainWindow(ctk.CTk):
         
         # Yeni sayfayı göster
         self.current_page = self.pages[page_name]
-        self.current_page.grid(row=0, column=1, sticky="nsew", padx=20, pady=20)
+        self.current_page.grid(row=1, column=1, sticky="nsew", padx=20, pady=20)
+    
+    def create_top_bar(self):
+        top_bar = ctk.CTkFrame(self, fg_color="#1E1E1E", height=50)
+        top_bar.grid(row=0, column=1, sticky="ew", padx=20, pady=(20, 0))
+        top_bar.grid_propagate(False)
+        
+        if self.auth_manager and self.auth_manager.current_user:
+            user_info = f"Hoşgeldin, {self.auth_manager.current_user['username']} ({self.auth_manager.current_user['role']})"
+            ctk.CTkLabel(top_bar, text=user_info, font=ctk.CTkFont(size=12)).pack(side="left", padx=20, pady=15)
+            
+            ctk.CTkButton(
+                top_bar,
+                text="Çıkış Yap",
+                fg_color="#F44336",
+                hover_color="#D32F2F",
+                width=80,
+                height=30,
+                command=self.logout
+            ).pack(side="right", padx=20, pady=10)
+    
+    def logout(self):
+        if self.auth_manager:
+            self.auth_manager.logout()
+        self.destroy()
+        from .login_window import LoginWindow
+        login_app = LoginWindow()
+        login_app.mainloop()
