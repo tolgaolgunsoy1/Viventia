@@ -10,7 +10,7 @@ class LoginWindow(ctk.CTk):
         
         self.title("Viventia - Giriş")
         self.geometry("500x550")
-        self.configure(fg_color="#0A0A0A")
+        self.configure(fg_color="#FFFFFF")
         self.resizable(False, False)
         
         # Pencereyi merkeze al

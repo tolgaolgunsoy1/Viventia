@@ -49,8 +49,8 @@ def setup_application():
     """Uygulama ayarlarını yapar"""
     try:
         # Tema ayarları
-        ctk.set_appearance_mode("dark")
-        ctk.set_default_color_theme("green")
+        ctk.set_appearance_mode("light")
+        ctk.set_default_color_theme("blue")
         
         # Log dosyası için dizin oluştur
         log_dir = "logs"

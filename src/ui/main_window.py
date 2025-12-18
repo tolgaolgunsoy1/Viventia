@@ -167,8 +167,8 @@ class MainWindow(ctk.CTk):
     def configure_theme(self):
         """Tema yapılandırması"""
         try:
-            ctk.set_appearance_mode("dark")
-            ctk.set_default_color_theme("green")
+            ctk.set_appearance_mode("light")
+            ctk.set_default_color_theme("blue")
         except:
             pass
     
