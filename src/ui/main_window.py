@@ -23,7 +23,7 @@ class MainWindow(ctk.CTk):
         # Pencere ayarları
         self.title("Viventia - İnsan Kaynakları Yönetim Sistemi")
         self.geometry("1500x950")
-        self.configure(fg_color="#0F0F0F")
+        self.configure(fg_color="#1A1A1A")
         
         # Pencere ikonunu ayarla
         try:
@@ -110,7 +110,7 @@ class MainWindow(ctk.CTk):
     
     def create_top_bar(self):
         """Üst bar oluşturma"""
-        top_bar = ctk.CTkFrame(self, fg_color="#1A1A1A", height=70, corner_radius=15)
+        top_bar = ctk.CTkFrame(self, fg_color="#2B2B2B", height=70, corner_radius=15)
         top_bar.grid(row=0, column=1, sticky="ew", padx=20, pady=(20, 0))
         top_bar.grid_propagate(False)
         
@@ -123,7 +123,7 @@ class MainWindow(ctk.CTk):
             left_frame,
             text="🟢 Sistem Aktif",
             font=ctk.CTkFont(size=12, weight="bold"),
-            text_color="#50C878"
+            text_color="#4ECDC4"
         )
         status_label.pack(expand=True)
         
@@ -186,13 +186,10 @@ class MainWindow(ctk.CTk):
     
     def on_closing(self):
         """Pencere kapatma işlemi"""
-        if error_handler.confirm_action(
-            "Uygulamayı kapatmak istediğinizden emin misiniz?",
-            "Çıkış Onayı"
-        ):
-            # Temizlik işlemleri
-            pass
-            self.logout()
+        import sys
+        self.quit()
+        self.destroy()
+        sys.exit()
     
     def _darken_color(self, color):
         """Rengi koyulaştırır"""

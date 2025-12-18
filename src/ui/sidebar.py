@@ -2,7 +2,7 @@ import customtkinter as ctk
 
 class Sidebar(ctk.CTkFrame):
     def __init__(self, parent, auth_manager=None):
-        super().__init__(parent, fg_color="#1E1E1E", width=250)
+        super().__init__(parent, fg_color="#2B2B2B", width=250)
         
         self.parent = parent
         self.auth_manager = auth_manager
@@ -13,7 +13,7 @@ class Sidebar(ctk.CTkFrame):
             self, 
             text="VIVENTIA", 
             font=ctk.CTkFont(size=24, weight="bold"),
-            text_color="#50C878"
+            text_color="#4ECDC4"
         )
         self.logo_label.pack(pady=(30, 50))
         
@@ -39,7 +39,7 @@ class Sidebar(ctk.CTkFrame):
                 text=f"{icon}  {name}",
                 font=ctk.CTkFont(size=14),
                 fg_color="transparent",
-                hover_color="#50C878",
+                hover_color="#4ECDC4",
                 anchor="w",
                 height=50,
                 command=lambda n=name: self.button_click(n)
@@ -48,7 +48,19 @@ class Sidebar(ctk.CTkFrame):
             self.buttons[name] = btn
         
         # İlk buton seçili
-        self.buttons["Dashboard"].configure(fg_color="#50C878")
+        self.buttons["Dashboard"].configure(fg_color="#4ECDC4")
+        
+        # Çıkış butonu
+        exit_btn = ctk.CTkButton(
+            self,
+            text="🚪 Çıkış",
+            font=ctk.CTkFont(size=14),
+            fg_color="#E74C3C",
+            hover_color="#C0392B",
+            height=50,
+            command=self.exit_app
+        )
+        exit_btn.pack(fill="x", padx=20, pady=(20, 30), side="bottom")
         
     def button_click(self, name):
         # Tüm butonları sıfırla
@@ -56,7 +68,14 @@ class Sidebar(ctk.CTkFrame):
             btn.configure(fg_color="transparent")
         
         # Seçili butonu vurgula
-        self.buttons[name].configure(fg_color="#50C878")
+        self.buttons[name].configure(fg_color="#4ECDC4")
         
         # Ana pencereye bildir
         self.parent.show_page(name)
+    
+    def exit_app(self):
+        # Uygulamayı kapat
+        import sys
+        self.parent.quit()
+        self.parent.destroy()
+        sys.exit()
