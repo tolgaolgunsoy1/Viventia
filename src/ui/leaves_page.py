@@ -3,7 +3,7 @@ from datetime import datetime, timedelta
 
 class LeavesPage(ctk.CTkFrame):
     def __init__(self, parent):
-        super().__init__(parent, fg_color="#121212")
+        super().__init__(parent, fg_color="#1A1A1A")
         
         # Başlık ve filtreler
         self.create_header()
@@ -39,8 +39,8 @@ class LeavesPage(ctk.CTkFrame):
         ctk.CTkButton(
             controls_frame,
             text="+ Yeni İzin",
-            fg_color="#50C878",
-            hover_color="#45B56B",
+            fg_color="#4ECDC4",
+            hover_color="#45B7B8",
             width=100,
             command=self.add_leave
         ).pack(side="left", padx=10)
@@ -51,7 +51,7 @@ class LeavesPage(ctk.CTkFrame):
         
         stats = [
             ("Bekleyen Talepler", "8", "#FF9800"),
-            ("Bu Ay Onaylanan", "15", "#50C878"),
+            ("Bu Ay Onaylanan", "15", "#4ECDC4"),
             ("Toplam İzin Günü", "142", "#2196F3"),
             ("Ortalama İzin", "9.5 gün", "#9C27B0")
         ]
@@ -108,7 +108,10 @@ class LeavesPage(ctk.CTkFrame):
             db = Database()
             leaves_data = db.get_leaves()
         except Exception:
-            leaves_data = []
+            leaves_data = [
+                (1, "Ahmet Yılmaz", "Yıllık İzin", "2024-04-15", "2024-04-19", "Tatil", "Bekliyor"),
+                (2, "Ayşe Kaya", "Hastalık İzni", "2024-04-10", "2024-04-12", "Grip", "Onaylandı")
+            ]
         
         for leave in leaves_data:
             # Calculate days between dates
@@ -143,7 +146,7 @@ class LeavesPage(ctk.CTkFrame):
                 if value == "Bekliyor":
                     color = "#FF9800"
                 elif value == "Onaylandı":
-                    color = "#50C878"
+                    color = "#4ECDC4"
                 else:
                     color = "#F44336"
             else:
@@ -166,7 +169,7 @@ class LeavesPage(ctk.CTkFrame):
                 text="Onayla", 
                 width=60, 
                 height=25,
-                fg_color="#50C878",
+                fg_color="#4ECDC4",
                 command=lambda: self.approve_leave(leave_data[0])
             ).pack(side="left", padx=2)
             

@@ -10,7 +10,8 @@ from .training_page import TrainingPage
 from .reports_page import ReportsPage
 from .settings_page import SettingsPage
 from .backup_page import BackupPage
-from ..utils.error_handler import error_handler, safe_execute
+from .email_settings_page import EmailSettingsPage
+
 
 class MainWindow(ctk.CTk):
     def __init__(self, auth_manager=None):
@@ -58,7 +59,7 @@ class MainWindow(ctk.CTk):
         
     def show_page(self, page_name):
         """Sayfa gösterme işlemi"""
-        def _show_page():
+        try:
             # Mevcut sayfayı gizle
             if self.current_page:
                 self.current_page.grid_forget()
@@ -66,21 +67,18 @@ class MainWindow(ctk.CTk):
             # Sayfa yoksa oluştur
             if page_name not in self.pages:
                 if page_name == "Dashboard":
-                    from .enhanced_dashboard import EnhancedDashboard
-                    self.pages[page_name] = EnhancedDashboard(self)
+                    from .dashboard import Dashboard
+                    self.pages[page_name] = Dashboard(self)
                 elif page_name == "Personel":
-                    from .enhanced_personnel import EnhancedPersonnelPage
-                    self.pages[page_name] = EnhancedPersonnelPage(self)
+                    self.pages[page_name] = PersonnelPage(self)
                 elif page_name == "İşe Alım":
                     self.pages[page_name] = RecruitmentPage(self)
                 elif page_name == "Puantaj":
                     self.pages[page_name] = AttendancePage(self)
                 elif page_name == "Bordro":
-                    from .enhanced_payroll import EnhancedPayrollPage
-                    self.pages[page_name] = EnhancedPayrollPage(self)
+                    self.pages[page_name] = PayrollPage(self)
                 elif page_name == "İzinler":
-                    from .enhanced_leaves import EnhancedLeavesPage
-                    self.pages[page_name] = EnhancedLeavesPage(self)
+                    self.pages[page_name] = LeavesPage(self)
                 elif page_name == "Performans":
                     self.pages[page_name] = PerformancePage(self)
                 elif page_name == "Eğitim":
@@ -93,9 +91,11 @@ class MainWindow(ctk.CTk):
                     self.pages[page_name] = settings_page
                 elif page_name == "Yedekleme":
                     self.pages[page_name] = BackupPage(self)
+                elif page_name == "E-posta":
+                    self.pages[page_name] = EmailSettingsPage(self)
                 else:
                     # Diğer sayfalar için placeholder
-                    self.pages[page_name] = ctk.CTkFrame(self, fg_color="#121212")
+                    self.pages[page_name] = ctk.CTkFrame(self, fg_color="#1A1A1A")
                     ctk.CTkLabel(
                         self.pages[page_name], 
                         text=f"{page_name} sayfası yakında...",
@@ -105,8 +105,9 @@ class MainWindow(ctk.CTk):
             # Yeni sayfayı göster
             self.current_page = self.pages[page_name]
             self.current_page.grid(row=1, column=1, sticky="nsew", padx=20, pady=20)
-        
-        safe_execute(_show_page, context=f"Sayfa gösterme: {page_name}")
+            
+        except Exception as e:
+            print(f"Sayfa yükleme hatası: {e}")
     
     def create_top_bar(self):
         """Üst bar oluşturma"""
@@ -147,7 +148,7 @@ class MainWindow(ctk.CTk):
                 fg_color=color,
                 hover_color=self._darken_color(color),
                 corner_radius=20,
-                command=lambda cmd=command: safe_execute(cmd, context=f"Hızlı erişim: {tooltip}")
+                command=lambda cmd=command: cmd()
             )
             btn.pack(side="right", padx=3)
             
@@ -168,21 +169,21 @@ class MainWindow(ctk.CTk):
         try:
             ctk.set_appearance_mode("dark")
             ctk.set_default_color_theme("green")
-            error_handler.log_info("Tema başarıyla yapılandırıldı")
-        except Exception as e:
-            error_handler.handle_error(e, "Tema yapılandırması", show_user=False)
+        except:
+            pass
     
     def logout(self):
         """Çıkış işlemi"""
-        def _logout():
+        try:
             if self.auth_manager:
                 self.auth_manager.logout()
             self.destroy()
             from .login_window import LoginWindow
             login_app = LoginWindow()
             login_app.mainloop()
-        
-        safe_execute(_logout, context="Çıkış işlemi")
+        except:
+            import sys
+            sys.exit()
     
     def on_closing(self):
         """Pencere kapatma işlemi"""

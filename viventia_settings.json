@@ -1,0 +1,14 @@
+{
+  "company_name": "Viventia Teknoloji A.Ş.",
+  "theme": "Koyu Tema",
+  "language": "Türkçe",
+  "auto_save": true,
+  "default_leave_days": 15,
+  "probation_months": 3,
+  "work_start_time": "09:00",
+  "work_end_time": "18:00",
+  "sgk_rate": 14.0,
+  "income_tax_rate": 15.0,
+  "unemployment_rate": 1.0,
+  "auto_calculation": true
+}

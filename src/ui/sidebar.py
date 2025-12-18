@@ -30,6 +30,7 @@ class Sidebar(ctk.CTkFrame):
             ("Eğitim", "📚"),
             ("Raporlar", "📊"),
             ("Yedekleme", "💾"),
+            ("E-posta", "📧"),
             ("Ayarlar", "⚙️")
         ]
         
@@ -63,15 +64,18 @@ class Sidebar(ctk.CTkFrame):
         exit_btn.pack(fill="x", padx=20, pady=(20, 30), side="bottom")
         
     def button_click(self, name):
-        # Tüm butonları sıfırla
-        for btn in self.buttons.values():
-            btn.configure(fg_color="transparent")
-        
-        # Seçili butonu vurgula
-        self.buttons[name].configure(fg_color="#4ECDC4")
-        
-        # Ana pencereye bildir
-        self.parent.show_page(name)
+        try:
+            # Tüm butonları sıfırla
+            for btn in self.buttons.values():
+                btn.configure(fg_color="transparent")
+            
+            # Seçili butonu vurgula
+            self.buttons[name].configure(fg_color="#4ECDC4")
+            
+            # Ana pencereye bildir
+            self.after_idle(lambda: self.parent.show_page(name))
+        except:
+            pass
     
     def exit_app(self):
         # Uygulamayı kapat
