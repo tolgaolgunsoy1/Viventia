@@ -136,13 +136,80 @@ class RecruitmentPage(ctk.CTkFrame):
         ).pack(side="left", padx=2)
     
     def add_candidate(self):
+        from .add_candidate_modal import AddCandidateModal
+        modal = AddCandidateModal(self, callback=self.refresh_candidate_list)
+    
+    def refresh_candidate_list(self):
         from .notification_system import NotificationSystem
-        NotificationSystem.show_success(self, "Bilgi", "Aday ekleme özelliği yakında eklenecek!")
+        NotificationSystem.show_success(self, "Başarılı", "Aday listesi güncellendi!")
     
     def schedule_interview(self, candidate_name):
-        from .notification_system import NotificationSystem
-        NotificationSystem.show_success(self, "Bilgi", f"{candidate_name} için mülakat planlandı!")
+        # Mülakat tarihi güncelleme
+        import sqlite3
+        from datetime import datetime, timedelta
+        
+        try:
+            conn = sqlite3.connect(self.db.db_path)
+            cursor = conn.cursor()
+            
+            # Gelecek hafta için tarih belirle
+            interview_date = (datetime.now() + timedelta(days=7)).strftime("%Y-%m-%d")
+            
+            cursor.execute("""
+                UPDATE recruitment 
+                SET status = 'Mülakat', interview_date = ?
+                WHERE candidate_name = ?
+            """, (interview_date, candidate_name))
+            
+            conn.commit()
+            conn.close()
+            
+            from .notification_system import NotificationSystem
+            NotificationSystem.show_success(self, "Başarılı", f"{candidate_name} için mülakat {interview_date} tarihine planlandı!")
+            
+        except Exception as e:
+            from .notification_system import NotificationSystem
+            NotificationSystem.show_error(self, "Hata", f"Mülakat planlama hatası: {str(e)}")
     
     def hire_candidate(self, candidate_name):
-        from .notification_system import NotificationSystem
-        NotificationSystem.show_success(self, "Başarılı", f"{candidate_name} işe alındı!")
+        # Adayı işe alma
+        import sqlite3
+        
+        try:
+            conn = sqlite3.connect(self.db.db_path)
+            cursor = conn.cursor()
+            
+            # Önce aday bilgilerini al
+            cursor.execute("""
+                SELECT position, department, candidate_email
+                FROM recruitment 
+                WHERE candidate_name = ?
+            """, (candidate_name,))
+            
+            result = cursor.fetchone()
+            if result:
+                position, department, email = result
+                
+                # Personel tablosuna ekle
+                cursor.execute("""
+                    INSERT INTO employees (name, department, position, salary, hire_date, email, phone, status)
+                    VALUES (?, ?, ?, ?, date('now'), ?, '', 'Aktif')
+                """, (candidate_name, department, position, 10000, email))
+                
+                # İşe alım durumunu güncelle
+                cursor.execute("""
+                    UPDATE recruitment 
+                    SET status = 'İşe Alındı'
+                    WHERE candidate_name = ?
+                """, (candidate_name,))
+                
+                conn.commit()
+                
+                from .notification_system import NotificationSystem
+                NotificationSystem.show_success(self, "Başarılı", f"{candidate_name} başarıyla işe alındı ve personel listesine eklendi!")
+            
+            conn.close()
+            
+        except Exception as e:
+            from .notification_system import NotificationSystem
+            NotificationSystem.show_error(self, "Hata", f"İşe alma hatası: {str(e)}")

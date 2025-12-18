@@ -107,8 +107,8 @@ class PersonnelPage(ctk.CTkFrame):
             self.create_employee_row(emp)
     
     def edit_employee(self, employee_id):
-        from .notification_system import NotificationSystem
-        NotificationSystem.show_success(self, "Bilgi", f"Personel düzenleme özelliği yakında eklenecek. ID: {employee_id}")
+        from .edit_employee_modal import EditEmployeeModal
+        modal = EditEmployeeModal(self, employee_id, callback=self.refresh_employee_list)
     
     def delete_employee(self, employee_id):
         # Onay penceresi

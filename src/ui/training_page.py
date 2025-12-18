@@ -135,5 +135,9 @@ class TrainingPage(ctk.CTkFrame):
             ).grid(row=0, column=i, padx=8, pady=8)
     
     def add_training(self):
+        from .add_training_modal import AddTrainingModal
+        modal = AddTrainingModal(self, callback=self.refresh_training_list)
+    
+    def refresh_training_list(self):
         from .notification_system import NotificationSystem
-        NotificationSystem.show_success(self, "Bilgi", "Eğitim planlama özelliği yakında eklenecek!")
+        NotificationSystem.show_success(self, "Başarılı", "Eğitim listesi güncellendi!")

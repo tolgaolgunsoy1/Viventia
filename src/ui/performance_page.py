@@ -149,5 +149,9 @@ class PerformancePage(ctk.CTkFrame):
             ).grid(row=0, column=i, padx=10, pady=8)
     
     def add_evaluation(self):
+        from .add_evaluation_modal import AddEvaluationModal
+        modal = AddEvaluationModal(self, callback=self.refresh_evaluation_list)
+    
+    def refresh_evaluation_list(self):
         from .notification_system import NotificationSystem
-        NotificationSystem.show_success(self, "Bilgi", "Performans değerlendirme özelliği yakında eklenecek!")
+        NotificationSystem.show_success(self, "Başarılı", "Değerlendirme listesi güncellendi!")

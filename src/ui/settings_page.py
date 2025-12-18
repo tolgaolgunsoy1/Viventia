@@ -1,8 +1,11 @@
 import customtkinter as ctk
+from .settings_manager import SettingsManager
 
 class SettingsPage(ctk.CTkFrame):
     def __init__(self, parent):
         super().__init__(parent, fg_color="#121212")
+        self.settings_manager = SettingsManager()
+        self.widgets = {}
         
         # Başlık
         self.create_header()
@@ -26,28 +29,31 @@ class SettingsPage(ctk.CTkFrame):
         container = ctk.CTkScrollableFrame(self, fg_color="transparent")
         container.pack(fill="both", expand=True)
         
+        # Mevcut ayarları yükle
+        current_settings = self.settings_manager.get_all_settings()
+        
         # Genel Ayarlar
         self.create_section(container, "Genel Ayarlar", [
-            ("Şirket Adı", "entry", "Viventia Teknoloji A.Ş."),
+            ("Şirket Adı", "entry", current_settings.get("company_name", "Viventia Teknoloji A.Ş.")),
             ("Tema", "combo", ["Koyu Tema", "Açık Tema"]),
             ("Dil", "combo", ["Türkçe", "English"]),
-            ("Otomatik Kaydet", "switch", True)
+            ("Otomatik Kaydet", "switch", current_settings.get("auto_save", True))
         ])
         
         # Personel Ayarları
         self.create_section(container, "Personel Ayarları", [
-            ("Varsayılan İzin Günü", "entry", "15"),
-            ("Deneme Süresi (Ay)", "entry", "3"),
-            ("Mesai Başlangıç", "entry", "09:00"),
-            ("Mesai Bitiş", "entry", "18:00")
+            ("Varsayılan İzin Günü", "entry", str(current_settings.get("default_leave_days", 15))),
+            ("Deneme Süresi (Ay)", "entry", str(current_settings.get("probation_months", 3))),
+            ("Mesai Başlangıç", "entry", current_settings.get("work_start_time", "09:00")),
+            ("Mesai Bitiş", "entry", current_settings.get("work_end_time", "18:00"))
         ])
         
         # Bordro Ayarları
         self.create_section(container, "Bordro Ayarları", [
-            ("SGK Oranı (%)", "entry", "14"),
-            ("Gelir Vergisi (%)", "entry", "15"),
-            ("İşsizlik Sigortası (%)", "entry", "1"),
-            ("Otomatik Hesaplama", "switch", True)
+            ("SGK Oranı (%)", "entry", str(current_settings.get("sgk_rate", 14))),
+            ("Gelir Vergisi (%)", "entry", str(current_settings.get("income_tax_rate", 15))),
+            ("İşsizlik Sigortası (%)", "entry", str(current_settings.get("unemployment_rate", 1))),
+            ("Otomatik Hesaplama", "switch", current_settings.get("auto_calculation", True))
         ])
         
         # Kaydet butonu
@@ -99,9 +105,63 @@ class SettingsPage(ctk.CTkFrame):
                     
             widget.pack(side="right")
             
+            # Widget'ı sakla
+            self.widgets[f"{title}_{label}"] = (widget, widget_type)
+            
         # Alt boşluk
         ctk.CTkFrame(section, fg_color="transparent", height=20).pack()
         
     def save_settings(self):
-        # Ayarları kaydet
-        print("Ayarlar kaydedildi!")
+        # Tüm widget'lardan değerleri topla
+        new_settings = {}
+        
+        try:
+            for key, (widget, widget_type) in self.widgets.items():
+                section, field = key.split("_", 1)
+                
+                if widget_type == "entry":
+                    value = widget.get().strip()
+                    # Sayısal değerler için dönüştürme
+                    if field in ["Varsayılan İzin Günü", "Deneme Süresi (Ay)", "SGK Oranı (%)", "Gelir Vergisi (%)", "İşsizlik Sigortası (%)"]:
+                        try:
+                            value = int(value) if field in ["Varsayılan İzin Günü", "Deneme Süresi (Ay)"] else float(value)
+                        except ValueError:
+                            value = 0
+                elif widget_type == "combo":
+                    value = widget.get()
+                elif widget_type == "switch":
+                    value = widget.get() == 1
+                
+                # Ayar anahtarına dönüştür
+                setting_key = self.get_setting_key(field)
+                if setting_key:
+                    new_settings[setting_key] = value
+            
+            # Ayarları kaydet
+            if self.settings_manager.save_settings(new_settings):
+                from .notification_system import NotificationSystem
+                NotificationSystem.show_success(self, "Başarılı", "Ayarlar başarıyla kaydedildi!")
+            else:
+                from .notification_system import NotificationSystem
+                NotificationSystem.show_error(self, "Hata", "Ayarlar kaydedilemedi!")
+                
+        except Exception as e:
+            from .notification_system import NotificationSystem
+            NotificationSystem.show_error(self, "Hata", f"Ayar kaydetme hatası: {str(e)}")
+    
+    def get_setting_key(self, field_name):
+        mapping = {
+            "Şirket Adı": "company_name",
+            "Tema": "theme",
+            "Dil": "language",
+            "Otomatik Kaydet": "auto_save",
+            "Varsayılan İzin Günü": "default_leave_days",
+            "Deneme Süresi (Ay)": "probation_months",
+            "Mesai Başlangıç": "work_start_time",
+            "Mesai Bitiş": "work_end_time",
+            "SGK Oranı (%)": "sgk_rate",
+            "Gelir Vergisi (%)": "income_tax_rate",
+            "İşsizlik Sigortası (%)": "unemployment_rate",
+            "Otomatik Hesaplama": "auto_calculation"
+        }
+        return mapping.get(field_name)
