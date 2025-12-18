@@ -45,7 +45,7 @@ class EnhancedDashboard(ctk.CTkFrame):
         
         ctk.CTkLabel(
             left_frame,
-            text=f"{greeting}! 👋",
+            text=f"{greeting}!",
             font=ctk.CTkFont(size=24, weight="bold"),
             text_color="#2C3E50",
             anchor="w"
@@ -55,7 +55,7 @@ class EnhancedDashboard(ctk.CTkFrame):
             left_frame,
             text=f"Bugün {current_time.strftime('%d %B %Y, %A')}",
             font=ctk.CTkFont(size=14),
-            text_color="#CCCCCC",
+            text_color="#6C757D",
             anchor="w"
         ).pack(anchor="w", pady=(5, 0))
         
@@ -63,7 +63,7 @@ class EnhancedDashboard(ctk.CTkFrame):
             left_frame,
             text="Viventia HR Dashboard'a hoşgeldiniz",
             font=ctk.CTkFont(size=12),
-            text_color="#888888",
+            text_color="#6C757D",
             anchor="w"
         ).pack(anchor="w", pady=(5, 0))
         
@@ -72,22 +72,22 @@ class EnhancedDashboard(ctk.CTkFrame):
         right_frame.pack(side="right", fill="y", padx=30, pady=25)
         
         # Sistem durumu
-        status_card = ctk.CTkFrame(right_frame, fg_color="#2A2A2A", corner_radius=10, width=200, height=70)
+        status_card = ctk.CTkFrame(right_frame, fg_color="#E9ECEF", corner_radius=8, width=200, height=70)
         status_card.pack()
         status_card.pack_propagate(False)
         
         ctk.CTkLabel(
             status_card,
-            text="🟢 Sistem Durumu",
+            text="Sistem Durumu",
             font=ctk.CTkFont(size=12, weight="bold"),
-            text_color="#50C878"
+            text_color="#2C3E50"
         ).pack(pady=(10, 2))
         
         ctk.CTkLabel(
             status_card,
             text="Tüm sistemler çalışıyor",
             font=ctk.CTkFont(size=10),
-            text_color="#CCCCCC"
+            text_color="#28A745"
         ).pack(pady=(0, 10))
     
     def create_quick_stats(self):
@@ -98,9 +98,9 @@ class EnhancedDashboard(ctk.CTkFrame):
         # Başlık
         ctk.CTkLabel(
             stats_frame,
-            text="📊 Genel Bakış",
-            font=ctk.CTkFont(size=18, weight="bold"),
-            text_color="white",
+            text="Genel Bakış",
+            font=ctk.CTkFont(size=20, weight="bold"),
+            text_color="#2C3E50",
             anchor="w"
         ).pack(anchor="w", pady=(0, 15))
         
@@ -198,9 +198,9 @@ class EnhancedDashboard(ctk.CTkFrame):
         # Başlık
         ctk.CTkLabel(
             charts_frame,
-            text="📈 Analitik Veriler",
-            font=ctk.CTkFont(size=18, weight="bold"),
-            text_color="white",
+            text="Analitik Veriler",
+            font=ctk.CTkFont(size=20, weight="bold"),
+            text_color="#2C3E50",
             anchor="w"
         ).pack(anchor="w", pady=(0, 15))
         
@@ -227,12 +227,12 @@ class EnhancedDashboard(ctk.CTkFrame):
             parent,
             text="Personel Durumu",
             font=ctk.CTkFont(size=16, weight="bold"),
-            text_color="white"
+            text_color="#2C3E50"
         ).pack(pady=(20, 10))
         
         # Matplotlib figure
-        fig, ax = plt.subplots(figsize=(5, 4), facecolor='#1A1A1A')
-        ax.set_facecolor('#1A1A1A')
+        fig, ax = plt.subplots(figsize=(5, 4), facecolor='#FFFFFF')
+        ax.set_facecolor('#FFFFFF')
         
         try:
             employees = self.db.get_employees()
@@ -262,12 +262,12 @@ class EnhancedDashboard(ctk.CTkFrame):
             colors=colors,
             autopct='%1.1f%%',
             startangle=90,
-            wedgeprops=dict(width=0.6, edgecolor='#1A1A1A'),
-            textprops={'color': 'white', 'fontsize': 10}
+            wedgeprops=dict(width=0.6, edgecolor='#FFFFFF'),
+            textprops={'color': '#2C3E50', 'fontsize': 10}
         )
         
         # Merkez daire
-        centre_circle = plt.Circle((0, 0), 0.40, fc='#1A1A1A')
+        centre_circle = plt.Circle((0, 0), 0.40, fc='#FFFFFF')
         fig.gca().add_artist(centre_circle)
         
         ax.axis('equal')
@@ -286,12 +286,12 @@ class EnhancedDashboard(ctk.CTkFrame):
             parent,
             text="Departman Dağılımı",
             font=ctk.CTkFont(size=16, weight="bold"),
-            text_color="white"
+            text_color="#2C3E50"
         ).pack(pady=(20, 10))
         
         # Matplotlib figure
-        fig, ax = plt.subplots(figsize=(5, 4), facecolor='#1A1A1A')
-        ax.set_facecolor('#1A1A1A')
+        fig, ax = plt.subplots(figsize=(5, 4), facecolor='#FFFFFF')
+        ax.set_facecolor('#FFFFFF')
         
         try:
             employees = self.db.get_employees()
@@ -315,11 +315,11 @@ class EnhancedDashboard(ctk.CTkFrame):
         bars = ax.bar(departments, counts, color='#2C3E50', alpha=0.8, edgecolor='#34495E')
         
         # Grafik stilini ayarla
-        ax.set_xlabel('Departmanlar', color='white', fontsize=10)
-        ax.set_ylabel('Personel Sayısı', color='white', fontsize=10)
-        ax.tick_params(colors='white', labelsize=9)
-        ax.spines['bottom'].set_color('white')
-        ax.spines['left'].set_color('white')
+        ax.set_xlabel('Departmanlar', color='#2C3E50', fontsize=10)
+        ax.set_ylabel('Personel Sayısı', color='#2C3E50', fontsize=10)
+        ax.tick_params(colors='#2C3E50', labelsize=9)
+        ax.spines['bottom'].set_color('#2C3E50')
+        ax.spines['left'].set_color('#2C3E50')
         ax.spines['top'].set_visible(False)
         ax.spines['right'].set_visible(False)
         
@@ -327,7 +327,7 @@ class EnhancedDashboard(ctk.CTkFrame):
         for bar, count in zip(bars, counts):
             height = bar.get_height()
             ax.text(bar.get_x() + bar.get_width()/2., height + 0.1,
-                   str(count), ha='center', va='bottom', color='white', fontsize=9)
+                   str(count), ha='center', va='bottom', color='#2C3E50', fontsize=9)
         
         plt.xticks(rotation=45, ha='right')
         plt.tight_layout()
@@ -350,9 +350,9 @@ class EnhancedDashboard(ctk.CTkFrame):
         
         ctk.CTkLabel(
             header_frame,
-            text="🕒 Son Aktiviteler",
-            font=ctk.CTkFont(size=16, weight="bold"),
-            text_color="white"
+            text="Son Aktiviteler",
+            font=ctk.CTkFont(size=18, weight="bold"),
+            text_color="#2C3E50"
         ).pack(side="left")
         
         ctk.CTkButton(
@@ -360,8 +360,8 @@ class EnhancedDashboard(ctk.CTkFrame):
             text="Tümünü Gör",
             width=80,
             height=25,
-            fg_color="#50C878",
-            hover_color="#45B068",
+            fg_color="#2C3E50",
+            hover_color="#34495E",
             font=ctk.CTkFont(size=10)
         ).pack(side="right")
         
@@ -372,78 +372,58 @@ class EnhancedDashboard(ctk.CTkFrame):
         # Örnek aktiviteler
         activities = [
             {
-                "icon": "👤",
                 "title": "Yeni personel eklendi",
                 "description": "Ahmet Yılmaz - IT Departmanı",
-                "time": "2 saat önce",
-                "color": "#50C878"
+                "time": "2 saat önce"
             },
             {
-                "icon": "📅",
                 "title": "İzin talebi onaylandı",
                 "description": "Ayşe Kaya - Yıllık İzin",
-                "time": "4 saat önce",
-                "color": "#2196F3"
+                "time": "4 saat önce"
             },
             {
-                "icon": "💰",
                 "title": "Bordro işlendi",
                 "description": "Aralık 2024 bordroları",
-                "time": "1 gün önce",
-                "color": "#FF9800"
+                "time": "1 gün önce"
             },
             {
-                "icon": "📊",
                 "title": "Performans değerlendirmesi",
                 "description": "Q4 değerlendirmeleri tamamlandı",
-                "time": "2 gün önce",
-                "color": "#9C27B0"
+                "time": "2 gün önce"
             }
         ]
         
         for activity in activities:
             activity_item = ctk.CTkFrame(activities_list, fg_color="#F8F9FA", corner_radius=8)
-            activity_item.pack(fill="x", pady=5)
+            activity_item.pack(fill="x", pady=3)
             
-            # Sol taraf - ikon
-            icon_frame = ctk.CTkFrame(activity_item, fg_color="#2C3E50", corner_radius=20, width=40, height=40)
-            icon_frame.pack(side="left", padx=15, pady=15)
-            icon_frame.pack_propagate(False)
-            
-            ctk.CTkLabel(
-                icon_frame,
-                text=activity["icon"],
-                font=ctk.CTkFont(size=16),
-                text_color="white"
-            ).pack(expand=True)
-            
-            # Orta - içerik
+            # İçerik
             content_frame = ctk.CTkFrame(activity_item, fg_color="transparent")
-            content_frame.pack(side="left", fill="both", expand=True, padx=(0, 15), pady=15)
+            content_frame.pack(side="left", fill="both", expand=True, padx=20, pady=15)
             
             ctk.CTkLabel(
                 content_frame,
                 text=activity["title"],
-                font=ctk.CTkFont(size=12, weight="bold"),
-                text_color="white",
+                font=ctk.CTkFont(size=13, weight="bold"),
+                text_color="#2C3E50",
                 anchor="w"
             ).pack(anchor="w")
             
             ctk.CTkLabel(
                 content_frame,
                 text=activity["description"],
-                font=ctk.CTkFont(size=10),
-                text_color="#CCCCCC",
+                font=ctk.CTkFont(size=11),
+                text_color="#6C757D",
                 anchor="w"
             ).pack(anchor="w")
             
-            # Sağ taraf - zaman
+            # Zaman
             ctk.CTkLabel(
                 activity_item,
                 text=activity["time"],
-                font=ctk.CTkFont(size=9),
-                text_color="#888888"
-            ).pack(side="right", padx=15, pady=15)
+                font=ctk.CTkFont(size=10),
+                text_color="#ADB5BD"
+            ).pack(side="right", padx=20, pady=15)
     
     def create_quick_actions(self):
         """Hızlı işlemler"""
@@ -453,9 +433,9 @@ class EnhancedDashboard(ctk.CTkFrame):
         # Başlık
         ctk.CTkLabel(
             actions_frame,
-            text="⚡ Hızlı İşlemler",
-            font=ctk.CTkFont(size=18, weight="bold"),
-            text_color="white",
+            text="Hızlı İşlemler",
+            font=ctk.CTkFont(size=20, weight="bold"),
+            text_color="#2C3E50",
             anchor="w"
         ).pack(anchor="w", pady=(0, 15))
         
