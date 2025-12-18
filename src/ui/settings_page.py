@@ -4,6 +4,7 @@ from .settings_manager import SettingsManager
 class SettingsPage(ctk.CTkFrame):
     def __init__(self, parent):
         super().__init__(parent, fg_color="#121212")
+        self.parent = parent
         self.settings_manager = SettingsManager()
         self.widgets = {}
         
@@ -89,8 +90,11 @@ class SettingsPage(ctk.CTkFrame):
         ).pack(side="left", padx=10)
         
         # Sadece admin için kullanıcı yönetimi
-        if hasattr(self, 'parent') and hasattr(self.parent, 'auth_manager') and self.parent.auth_manager:
-            if self.parent.auth_manager.current_user and self.parent.auth_manager.current_user['role'] == 'admin':
+        try:
+            if (hasattr(self, 'auth_manager') and 
+                self.auth_manager and 
+                self.auth_manager.current_user and 
+                self.auth_manager.current_user['role'] == 'admin'):
                 ctk.CTkButton(
                     btn_frame,
                     text="👥 Kullanıcılar",
@@ -99,6 +103,8 @@ class SettingsPage(ctk.CTkFrame):
                     height=40,
                     command=self.open_user_management
                 ).pack(side="left", padx=10)
+        except AttributeError:
+            pass
         
     def create_section(self, parent, title, settings):
         # Bölüm çerçevesi

@@ -23,11 +23,11 @@ class MainWindow(ctk.CTk):
         
         # Grid yapılandırması
         self.grid_columnconfigure(1, weight=1)
-        self.grid_rowconfigure(0, weight=1)
+        self.grid_rowconfigure(1, weight=1)
         
         # Bileşenler
         self.sidebar = Sidebar(self, self.auth_manager)
-        self.sidebar.grid(row=0, column=0, sticky="nsew")
+        self.sidebar.grid(row=0, column=0, rowspan=2, sticky="nsew")
         
         # Üst bar - kullanıcı bilgisi
         self.create_top_bar()
@@ -65,7 +65,9 @@ class MainWindow(ctk.CTk):
             elif page_name == "Raporlar":
                 self.pages[page_name] = ReportsPage(self)
             elif page_name == "Ayarlar":
-                self.pages[page_name] = SettingsPage(self)
+                settings_page = SettingsPage(self)
+                settings_page.auth_manager = self.auth_manager
+                self.pages[page_name] = settings_page
             else:
                 # Diğer sayfalar için placeholder
                 self.pages[page_name] = ctk.CTkFrame(self, fg_color="#121212")

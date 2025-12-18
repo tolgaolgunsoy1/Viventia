@@ -98,13 +98,17 @@ class PersonnelPage(ctk.CTkFrame):
         
     def refresh_employee_list(self):
         # Personel listesini yenile
-        for widget in self.scrollable_frame.winfo_children():
-            if isinstance(widget, ctk.CTkFrame) and widget != self.scrollable_frame.winfo_children()[0]:
-                widget.destroy()
-                
-        employees = self.db.get_employees()
-        for emp in employees:
-            self.create_employee_row(emp)
+        try:
+            for widget in self.scrollable_frame.winfo_children():
+                if isinstance(widget, ctk.CTkFrame) and len(self.scrollable_frame.winfo_children()) > 1 and widget != self.scrollable_frame.winfo_children()[0]:
+                    widget.destroy()
+                    
+            employees = self.db.get_employees()
+            for emp in employees:
+                self.create_employee_row(emp)
+        except Exception as e:
+            from .notification_system import NotificationSystem
+            NotificationSystem.show_error(self, "Hata", f"Liste yenilenemedi: {str(e)}")
     
     def edit_employee(self, employee_id):
         from .edit_employee_modal import EditEmployeeModal

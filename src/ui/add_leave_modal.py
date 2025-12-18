@@ -134,13 +134,14 @@ class AddLeaveModal(ctk.CTkToplevel):
             return
             
         # Tarih formatı kontrolü
-        try:
-            from datetime import datetime
-            datetime.strptime(data['start_date'], "%Y-%m-%d")
-            datetime.strptime(data['end_date'], "%Y-%m-%d")
-        except ValueError:
-            self.show_error("Geçerli tarih formatı: YYYY-MM-DD")
-            return
+        if data['start_date'] and data['end_date']:
+            try:
+                from datetime import datetime
+                datetime.strptime(data['start_date'], "%Y-%m-%d")
+                datetime.strptime(data['end_date'], "%Y-%m-%d")
+            except ValueError:
+                self.show_error("Geçerli tarih formatı: YYYY-MM-DD")
+                return
             
         # Veritabanına kaydet
         try:

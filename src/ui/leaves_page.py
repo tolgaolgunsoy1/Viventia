@@ -103,9 +103,12 @@ class LeavesPage(ctk.CTkFrame):
             ).grid(row=0, column=i, padx=10, pady=10)
         
         # Veritabanından izin verilerini al
-        from ..database.database import Database
-        db = Database()
-        leaves_data = db.get_leaves()
+        try:
+            from ..database.database import Database
+            db = Database()
+            leaves_data = db.get_leaves()
+        except Exception:
+            leaves_data = []
         
         for leave in leaves_data:
             # Calculate days between dates
@@ -196,9 +199,12 @@ class LeavesPage(ctk.CTkFrame):
     
     def refresh_leaves_list(self):
         # Clear existing data
-        for widget in self.scrollable.winfo_children():
-            if isinstance(widget, ctk.CTkFrame) and widget != self.scrollable.winfo_children()[0]:
-                widget.destroy()
+        try:
+            for widget in self.scrollable.winfo_children():
+                if isinstance(widget, ctk.CTkFrame) and len(self.scrollable.winfo_children()) > 1 and widget != self.scrollable.winfo_children()[0]:
+                    widget.destroy()
+        except Exception:
+            pass
         
         # Reload data
         from ..database.database import Database
